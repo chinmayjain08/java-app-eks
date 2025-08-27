@@ -1,4 +1,4 @@
-# BoardgameListingWebApp
+# Boardgame ListingWebApp
 
 ## Description --
 
