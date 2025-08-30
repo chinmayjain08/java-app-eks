@@ -1,74 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: boardgame-deployment
+  name: java-app
+  labels:
+    app: java-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: boardgame
+      app: java-app
   template:
     metadata:
       labels:
-        app: boardgame
+        app: java-app
     spec:
       containers:
-        - name: boardgame
-          image: 599626541588.dkr.ecr.ap-south-1.amazonaws.com/workshop/demo:latest # <-- update if using ECR
-          imagePullPolicy: Always
+        - name: java-app
+          image: 13.62.56.162:8082/java-project/java-app:latest
           ports:
             - containerPort: 8080
-      imagePullSecrets:                     # <-- moved to the pod spec
-        - name: ecr-registry-secret
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: boardgame-ssvc
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+  name: java-app-service
 spec:
   selector:
-    app: boardgame
+    app: java-app
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 8080
+      port: 80          # external port
+      targetPort: 8080  # container port
   type: LoadBalancer
-
-# apiVersion: apps/v1
-# kind: Deployment # Kubernetes resource kind we are creating
-# metadata:
-#   name: boardgame-deployment
-# spec:
-#   selector:
-#     matchLabels:
-#       app: boardgame
-#   replicas: 2 # Number of replicas that will be created for this deployment
-#   template:
-#     metadata:
-#       labels:
-#         app: boardgame
-#     spec:
-#       containers:
-#         - name: boardgame
-#           image: venkatbs/workshop:latest # Image that will be used to containers in the cluster
-#           imagePullPolicy: Always
-#           ports:
-#             - containerPort: 8080 # The port that the container is running on in the cluster
-
-
-# ---
-
-# apiVersion: v1 # Kubernetes API version
-# kind: Service # Kubernetes resource kind we are creating
-# metadata: # Metadata of the resource kind we are creating
-#   name: boardgame-ssvc
-# spec:
-#   selector:
-#     app: boardgame
-#   ports:
-#     - protocol: "TCP"
-#       port: 80
-#       targetPort: 8080 
-#   type: LoadBalancer # type of the service.
