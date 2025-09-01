@@ -14,4 +14,4 @@
       <password>${nexus.password}</password>
     </server>
   </servers>
-</settings>
+</settings> 
